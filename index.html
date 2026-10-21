@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="utf-8">
+<!--
+  ============================================================
+   LANGKAH WAJIB: tampal link Web App Apps Script anda di bawah
+   (link yang berakhir dengan /exec)
+  ============================================================
+-->
+<script>
+  const APP_URL = 'https://script.google.com/macros/s/AKfycbxjl1jC27-EuxDWofC_EvpyPBB6zLxQ3SroapphReZZcMSBmTT_vWPy5zWC_gOC7_ly0A/exec';
+</script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#14365c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="DKP Staf">
+<title>DKP Staf</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<style>
+  html, body { margin: 0; height: 100%; background: #14365c; overflow: hidden; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  iframe { position: fixed; inset: 0; width: 100%; height: 100%; border: 0; background: #eef1f6; }
+  #splash { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 18px; color: #fff; background: linear-gradient(160deg, #14365c 0%, #1f5a94 60%, #2a6fb0 100%); z-index: 2; transition: opacity .35s; }
+  #splash img { width: 96px; height: 96px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,.3); }
+  #splash b { font-size: 20px; }
+  #splash small { opacity: .75; font-size: 13px; text-align: center; padding: 0 24px; }
+  .spin { width: 26px; height: 26px; border: 3px solid rgba(255,255,255,.35); border-top-color: #fff; border-radius: 50%; animation: s .8s linear infinite; }
+  @keyframes s { to { transform: rotate(360deg); } }
+  #splash button { margin-top: 6px; border: 0; background: #f2a33a; color: #14365c; font-weight: 800; font-size: 15px; padding: 12px 22px; border-radius: 12px; display: none; }
+  .hide { opacity: 0; pointer-events: none; }
+</style>
+</head>
+<body>
+  <div id="splash">
+    <img src="icon-192.png" alt="">
+    <b>DKP Staf</b>
+    <div class="spin" id="spin"></div>
+    <small id="msg">Memuatkan…</small>
+    <button id="retry" type="button">Cuba lagi</button>
+  </div>
+
+<script>
+  const splash = document.getElementById('splash'), msg = document.getElementById('msg'),
+        retry = document.getElementById('retry'), spin = document.getElementById('spin');
+
+  function buka() {
+    if (!/^https:\/\/script\.google\.com\/.+\/exec/.test(APP_URL)) {
+      spin.style.display = 'none';
+      msg.textContent = 'Link app belum ditetapkan. Buka fail index.html dan tampal link /exec Apps Script anda.';
+      return;
+    }
+    if (!navigator.onLine) {
+      spin.style.display = 'none'; retry.style.display = 'block';
+      msg.textContent = 'Tiada sambungan internet. Sila sambung dan cuba lagi.';
+      return;
+    }
+    spin.style.display = ''; retry.style.display = 'none'; msg.textContent = 'Memuatkan…';
+    const old = document.querySelector('iframe'); if (old) old.remove();
+    const f = document.createElement('iframe');
+    f.src = APP_URL;
+    f.allow = 'camera; clipboard-write';
+    f.onload = () => setTimeout(() => splash.classList.add('hide'), 300);
+    document.body.appendChild(f);
+    // jika terlalu lama, beri pilihan cuba lagi
+    setTimeout(() => { if (!splash.classList.contains('hide')) { retry.style.display = 'block'; msg.textContent = 'Masih memuatkan… sambungan perlahan?'; } }, 15000);
+  }
+  retry.onclick = () => { splash.classList.remove('hide'); buka(); };
+  window.addEventListener('online', () => { if (!document.querySelector('iframe')) buka(); });
+  buka();
+
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+</script>
+</body>
+</html>
