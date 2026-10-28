@@ -1,5 +1,5 @@
 // Simpan "kulit" app dalam telefon supaya ia dibuka segera
-const CACHE = 'dkp-shell-v1';
+const CACHE = 'dkp-staf-shell-v2';   // nama unik untuk app ini sahaja
 const FILES = ['./', 'index.html', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'apple-touch-icon.png'];
 
 self.addEventListener('install', e => {
